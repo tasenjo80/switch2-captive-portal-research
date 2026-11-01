@@ -27,11 +27,14 @@ Stages after the read primitive are not verified.
 - The UAF is reachable; no-reclaim crashes the system.
 - A same-size reclaim, a 4-byte read, and a self-address chain in successful
   runs.
+- A fake CSSOM object can be constructed and the setter no longer crashes;
+  the write itself is not yet confirmed.
 
 ## Open questions
 
 1. Is there a stable write/ARW path that does not depend on the fragile read
-   chain?
+   chain? A fake CSSOM write path is close; a fake-vector field-order bug was
+   found and fixed, and a retest is pending.
 2. Does the applet's NPDM actually grant `fsp-srv` at runtime, and which
    filesystem can it mount?
 3. Is the `fs` `GetEntryType` path-normalization bug reachable from the
@@ -45,6 +48,8 @@ Stages after the read primitive are not verified.
 
 ## Next steps
 
+- Retest the corrected fake CSSOM write. If the 16-byte write lands, use it to
+  build a stable read/write window.
 - Improve trigger/reclaim reliability before attempting the write stage.
 - Verify the applet NPDM/`fsp-srv` claim from a dump if one becomes available.
 - Keep the console offline and do not update.

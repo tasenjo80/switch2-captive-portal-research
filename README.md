@@ -24,7 +24,8 @@ Partial chain, verified on one Switch 2 on firmware **23.0.1**:
 
 Not verified:
 
-- A stable arbitrary write / ARW.
+- A stable arbitrary write / ARW. A fake CSSOM write path is close but the
+  write itself is not yet confirmed.
 - Applet `fsp-srv` calls, the `fs` path-normalization route, kernel access,
   or CFW.
 - The 24-hour gate test.
