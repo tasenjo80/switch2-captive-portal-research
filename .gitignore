@@ -1,0 +1,56 @@
+# Raw research data and local output
+logs/
+results/
+*.jsonl
+*.log
+*.pcap
+*.pcapng
+*.har
+*.txt
+!LICENSE*
+!*.md
+!*.cff
+!*.yml
+!*.yaml
+
+# Screenshots and media
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.mp4
+*.webm
+*.wav
+*.mp3
+
+# Console binaries and content
+*.nca
+*.nsp
+*.xci
+*.nro
+*.nso
+*.npdm
+*.kip
+*.bin
+*.romfs
+*.exefs
+*.save
+*.bfttf
+*.bfttf.*
+
+# Keys and secrets
+*.keys
+*keys*.txt
+*prod.keys*
+*title.keys*
+settings.toml
+.env
+
+# Local tooling
+__pycache__/
+*.pyc
+node_modules/
+.venv/
+.vscode/
+.idea/
