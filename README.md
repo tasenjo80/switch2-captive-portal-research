@@ -35,6 +35,10 @@ Not verified / currently blocked:
   null; cache names are fixed), and the FS request path is thread-local.
   The FS session/manager structures are self-referential; a simple fake
   object does not work.
+- An applet-side PID1/FullPermission promotion. The permission registry is in
+  the `fsp-srv` server/KIP process; applet ARW cannot reach it. A read-only
+  probe matched the applet base and `fsp-srv` string but crashed on the
+  server-relative registry address.
 - Applet `fsp-srv` calls, the `fs` path-normalization route, kernel access,
   or CFW.
 - The 24-hour gate test.

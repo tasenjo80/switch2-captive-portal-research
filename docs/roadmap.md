@@ -54,12 +54,17 @@ Stages after ARW are not verified.
    open?
 7. Is there a non-WebKit path from the applet's other services
    (`bsd:a`, `ns:web`, `ns:vm`, `caps:a`, ...) to a useful primitive?
+8. Is there a client-side permission copy or a legitimate `fsp-srv` command
+   that grants access? The server-side PID1 registry is outside the applet's
+   ARW, so applet-side promotion cannot reach it.
 
 ## Next steps
 
 - Pause blind FS probing. The remaining FS work needs a firmware/applet dump
   for static analysis of the FS client and path builder, a second bug that
   yields a controllable FS parameter, or a released working FS chain.
+- Do not pursue applet-side PID1 promotion; the permission registry is in the
+  `fsp-srv` server process, not the applet.
 - Keep the ARW work for read-only mapping and validation, not repeated
   pointer-redirect experiments.
 - Verify the applet NPDM/`fsp-srv` claim from a dump if one becomes available.
