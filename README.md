@@ -10,7 +10,7 @@ screenshots.
 
 ## Status
 
-Partial chain, verified on one Switch 2 on firmware **23.0.1**:
+Verified on one Switch 2 on firmware **23.0.1**:
 
 - The local captive-portal entry launches `WifiWebAuthApplet` and loads a
   controlled page. The applet re-opens without a reboot.
@@ -19,20 +19,30 @@ Partial chain, verified on one Switch 2 on firmware **23.0.1**:
   WebKit source at the time of review.
 - The freed object was reclaimed with same-size `ArrayBuffer`s, and a 4-byte
   arbitrary read plus a self-address chain were confirmed.
+- The chain reaches a full **16 MB arbitrary read/write window** in the applet
+  process. This was independently reproduced on hardware with a public
+  community WebKit chain for the same applet/firmware; the chain is
+  timing-sensitive and the renderer often dies after it completes
+  (`2168-0002`). One run survived the cleanup.
+- The applet's FS client, mount table, and session structures were mapped.
+  `.bss` and the FS client page are writable; `.data` is read-only after init.
 - A no-reclaim trigger crashes the console to error `2168-0002`; this is
   consistent with the applet sharing the host address space.
 
-Not verified:
+Not verified / currently blocked:
 
-- A stable arbitrary write / ARW. A fake CSSOM write path is close but the
-  write itself is not yet confirmed.
+- A web-controlled FS path. The applet exposes no path API (`indexedDB` is
+  null; cache names are fixed), and the FS request path is thread-local.
+  The FS session/manager structures are self-referential; a simple fake
+  object does not work.
 - Applet `fsp-srv` calls, the `fs` path-normalization route, kernel access,
   or CFW.
 - The 24-hour gate test.
 - Any claim that the captive portal is a permanent or untethered entry.
 
-The chain is timing-sensitive and the UAF path has crashed repeatedly. Do not
-treat any stage as reliable.
+ARW is not a jailbreak. The UAF path is timing-sensitive and has crashed
+repeatedly. See [`docs/status-2026-11-02.md`](docs/status-2026-11-02.md) and
+[`docs/results-2026-11-01.md`](docs/results-2026-11-01.md).
 
 ## Safety
 
@@ -68,6 +78,7 @@ README.md
 docs/
   methodology.md
   results-2026-11-01.md
+  status-2026-11-02.md
   roadmap.md
   safety.md
   publication-policy.md
@@ -87,6 +98,10 @@ SECURITY.md
   bug history.
 - The public `ntfargo/CSSFontFace-Exploit` (MIT) is a PS4/PS5 reference for
   the same bug family; it is not Switch code and is not copied here.
+- A public community WebKit chain for the same applet/firmware was used for
+  the independent hardware reproduction of ARW. That repository is now
+  offline; its code is not copied here, and the result is labeled
+  independently reproduced, not audited.
 - Community claims about the applet NPDM, `fsp-srv`, and the `fs` overflow are
   labeled unverified in the notes.
 

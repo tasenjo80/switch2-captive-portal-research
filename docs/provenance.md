@@ -1,6 +1,6 @@
 # Provenance and confidence
 
-Reviewed: 2026-11-01.
+Reviewed: 2026-11-02.
 
 ## Primary sources
 
@@ -15,12 +15,17 @@ Reviewed: 2026-11-01.
   same-bug-family reference for the `m_featureSettings` read primitive and the
   general exploitation model. Its code is not copied here and it is not
   Switch code.
+- **Public community WebKit chain** for the same applet/firmware, used for the
+  independent hardware reproduction of full ARW. The repository is now
+  offline; its code is not copied here and was not audited line-by-line.
 
 ## Hardware observations
 
-- One Switch 2, firmware 23.0.1, one region, one test network.
+- One Switch 2, firmware 23.0.1, one region, one test network, multiple runs.
 - The session logs are private. Only sanitized summaries are published.
 - Exact heap addresses, offsets, spray counts, and timings are withheld.
+- Full ARW was reproduced across multiple runs on this console. The FS client,
+  mount table, WKC file procs, and session structures were observed at runtime.
 
 ## Community claims (unverified)
 
@@ -30,11 +35,14 @@ Reviewed: 2026-11-01.
   `fs`/kernel access.
 - The community worker/FS harness and its offsets.
 
-These are labeled unverified and are not used as confirmed facts.
+These are labeled unverified and are not used as confirmed facts. The FS
+client itself was observed at runtime; the NPDM was not independently dumped.
 
 ## Confidence
 
 - Engine code facts: high, from Nintendo's published source.
 - Entry/UAF/reclaim/read/self-address: verified on one console.
-- Write/ARW, `fsp-srv`, `fs`, kernel/CFW: not verified.
+- Full 16 MB ARW and FS structure mapping: verified on one console across
+  multiple runs; timing-sensitive, not a cross-console reliability claim.
+- `fsp-srv` calls, FS path injection, `fs`, kernel/CFW: not verified.
 - Gate behavior: not tested beyond the 24-hour window.
