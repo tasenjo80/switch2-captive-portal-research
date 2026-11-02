@@ -26,15 +26,22 @@ Verified on one Switch 2 on firmware **23.0.1**:
   (`2168-0002`). One run survived the cleanup.
 - The applet's FS client, mount table, and session structures were mapped.
   `.bss` and the FS client page are writable; `.data` is read-only after init.
+- A persistent FS storage/session object and its I/O buffer were mapped. A
+  controlled storage-buffer and HTTP-cache probe was negative: the buffer was
+  not used by `localStorage` or the cache request.
 - A no-reclaim trigger crashes the console to error `2168-0002`; this is
   consistent with the applet sharing the host address space.
 
 Not verified / currently blocked:
 
 - A web-controlled FS path. The applet exposes no path API (`indexedDB` is
-  null; cache names are fixed), and the FS request path is thread-local.
-  The FS session/manager structures are self-referential; a simple fake
+  null; cache names are fixed), and the FS request path/offset is thread-local
+  and only exists during an FS call. The applet's data-only ARW cannot patch
+  it. The FS session/manager structures are self-referential; a simple fake
   object does not work.
+- The public ns2jb path/cache race. The public ns2jb FS source describes a
+  path/cache race with a signed cache header, not a simple `GetEntryType`
+  path-normalization overflow; the applet alone cannot drive it.
 - An applet-side PID1/FullPermission promotion. The permission registry is in
   the `fsp-srv` server/KIP process; applet ARW cannot reach it. A read-only
   probe matched the applet base and `fsp-srv` string but crashed on the
@@ -42,13 +49,17 @@ Not verified / currently blocked:
 - The Chat/GameChat STUN path. GameChat requires NSO, persistent internet, a
   phone number, and the latest firmware; the offline/90DNS test console
   returned 2155-8007 and never reached TURN/STUN.
-- Applet `fsp-srv` calls, the `fs` path-normalization route, kernel access,
-  or CFW.
+- A local-wireless (ldn) exploit path. The advertisement is AES-GCM and
+  key-gated; public NPDM metadata gives ldn no FS permissions; bounded fuzzing
+  produced no crash. Parked on 2026-11-02.
+- Applet `fsp-srv` calls, the `fs` path/cache race route, kernel access, or
+  CFW.
 - The 24-hour gate test.
 - Any claim that the captive portal is a permanent or untethered entry.
 
 ARW is not a jailbreak. The UAF path is timing-sensitive and has crashed
-repeatedly. See [`docs/status-2026-11-02.md`](docs/status-2026-11-02.md) and
+repeatedly. See [`docs/status-2026-11-03.md`](docs/status-2026-11-03.md),
+[`docs/status-2026-11-02.md`](docs/status-2026-11-02.md), and
 [`docs/results-2026-11-01.md`](docs/results-2026-11-01.md).
 
 ## Safety
@@ -86,6 +97,7 @@ docs/
   methodology.md
   results-2026-11-01.md
   status-2026-11-02.md
+  status-2026-11-03.md
   roadmap.md
   safety.md
   publication-policy.md
@@ -105,12 +117,13 @@ SECURITY.md
   bug history.
 - The public `ntfargo/CSSFontFace-Exploit` (MIT) is a PS4/PS5 reference for
   the same bug family; it is not Switch code and is not copied here.
-- A public community WebKit chain for the same applet/firmware was used for
-  the independent hardware reproduction of ARW. That repository is now
-  offline; its code is not copied here, and the result is labeled
+- An earlier public community WebKit chain for the same applet/firmware was
+  used for the independent hardware reproduction of ARW. That repository is
+  now offline; its code is not copied here, and the result is labeled
   independently reproduced, not audited.
-- Community claims about the applet NPDM, `fsp-srv`, and the `fs` overflow are
-  labeled unverified in the notes.
+- Community claims about the applet NPDM, `fsp-srv`, and the `fs` route are
+  labeled unverified in the notes. The public ns2jb FS source describes a
+  path/cache race, not a simple `GetEntryType` overflow.
 
 This is independent research. It is not affiliated with Nintendo. No
 firmware, keys, tickets, game dumps, or piracy tools are provided or

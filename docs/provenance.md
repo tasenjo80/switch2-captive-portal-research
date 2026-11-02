@@ -18,6 +18,14 @@ Reviewed: 2026-11-02.
 - **Public community WebKit chain** for the same applet/firmware, used for the
   independent hardware reproduction of full ARW. The repository is now
   offline; its code is not copied here and was not audited line-by-line.
+- **Public community payload pack** `Jmesmykil/switch2-captive-portal-research`,
+  re-reviewed statically on 2026-11-02. Its README labels the pack a
+  reachability/diagnostic probe, not code execution. Only its ARW half was
+  independently reproduced; its PID1 promotion claim was not. No code is
+  copied here.
+- **Public LDN protocol documentation** (NintendoClients wiki) and the public
+  NPDM metadata snapshot, used for the ldn advertisement/encryption description
+  and the `ldn` `fsPermissions` observation. The raw ldn capture is private.
 
 ## Hardware observations
 
@@ -26,13 +34,18 @@ Reviewed: 2026-11-02.
 - Exact heap addresses, offsets, spray counts, and timings are withheld.
 - Full ARW was reproduced across multiple runs on this console. The FS client,
   mount table, WKC file procs, and session structures were observed at runtime.
+- The ldn local-wireless path was captured and evaluated on 2026-11-02:
+  AES-GCM/Ounce-key-gated, no FS permissions in the public NPDM metadata,
+  bounded fuzzing produced no crash, and the path was parked. Raw captures
+  remain private.
 
 ## Community claims (unverified)
 
 - The applet NPDM's `fsp-srv` permission and `fsPermissions` value.
 - The applet's `nn::fs` client and `FileChooser` path function.
-- The `fs` `GetEntryType` path-normalization overflow and its use for
-  `fs`/kernel access.
+- The `fs` path/cache race described in the public ns2jb source (a signed cache
+  header), which supersedes the earlier `GetEntryType` path-normalization
+  wording, and its use for `fs`/kernel access.
 - The community worker/FS harness and its offsets.
 
 These are labeled unverified and are not used as confirmed facts. The FS
@@ -44,5 +57,7 @@ client itself was observed at runtime; the NPDM was not independently dumped.
 - Entry/UAF/reclaim/read/self-address: verified on one console.
 - Full 16 MB ARW and FS structure mapping: verified on one console across
   multiple runs; timing-sensitive, not a cross-console reliability claim.
+- ldn reachability: verified; ldn exploit, join/peer primitive, or FS access:
+  not verified.
 - `fsp-srv` calls, FS path injection, `fs`, kernel/CFW: not verified.
 - Gate behavior: not tested beyond the 24-hour window.
