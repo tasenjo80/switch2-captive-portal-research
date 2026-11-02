@@ -39,6 +39,9 @@ Not verified / currently blocked:
   the `fsp-srv` server/KIP process; applet ARW cannot reach it. A read-only
   probe matched the applet base and `fsp-srv` string but crashed on the
   server-relative registry address.
+- The Chat/GameChat STUN path. GameChat requires NSO, persistent internet, a
+  phone number, and the latest firmware; the offline/90DNS test console
+  returned 2155-8007 and never reached TURN/STUN.
 - Applet `fsp-srv` calls, the `fs` path-normalization route, kernel access,
   or CFW.
 - The 24-hour gate test.

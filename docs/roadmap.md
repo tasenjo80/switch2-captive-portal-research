@@ -65,6 +65,9 @@ Stages after ARW are not verified.
   yields a controllable FS parameter, or a released working FS chain.
 - Do not pursue applet-side PID1 promotion; the permission registry is in the
   `fsp-srv` server process, not the applet.
+- Park the Chat/GameChat STUN path: GameChat requires NSO, online access, a
+  phone number, and the latest firmware; the offline/90DNS test console
+  returned 2155-8007 and never reached TURN/STUN.
 - Keep the ARW work for read-only mapping and validation, not repeated
   pointer-redirect experiments.
 - Verify the applet NPDM/`fsp-srv` claim from a dump if one becomes available.
